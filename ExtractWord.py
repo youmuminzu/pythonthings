@@ -1,5 +1,6 @@
-import re
-import jieba.posseg as psg
+# import re
+# import jieba.posseg as psg
+import jieba
 import collections
 
 
@@ -28,15 +29,15 @@ def stoplist():
 
 stoplist = stoplist()
 text = readfile('tophub_out.txt')
-filter = re.compile('[^\u4E00-\u9FD5]+')
-text = filter.sub('', text)
-seg = psg.cut(sentence=text, use_paddle=True)
+# filter = re.compile('[^\u4E00-\u9FD5]+')
+# text = filter.sub('', text)
+seg = jieba.cut(sentence=text, cut_all=True)
 meaninfulword = []
-for word, flag in seg:
+for word in seg:
     word = word.strip()
-    if word not in stoplist:
+    if word not in stoplist and len(word) > 1:
         meaninfulword.append(word)
-print(meaninfulword)
+# print(meaninfulword)
 count = collections.Counter(meaninfulword)
 # print(count)
-print(count.most_common(200))
+print(count.most_common(300))
